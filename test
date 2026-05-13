@@ -1,0 +1,40 @@
+hello world
+""
+class Solution {
+public:
+   
+    vector<bool> p(int end){
+         vector<bool>prime(1001,1);
+         prime[0]=0;
+         prime[1]=0;
+         for(int i=2;i*i<=1000;i++){
+            if(prime[i]){
+                for(int j=i*i;j<=1000;j+=i){
+                    prime[j]=0;
+                }
+            }
+         }
+         return prime;
+    }
+    int sumOfPrimesInRange(int n) {
+        int num=n;
+        int rev=0;
+        while(num){
+            int rem=num%10;
+            rev=rev*10+rem;
+            num/=10;
+        }
+        int mini=min(n,rev);
+        int maxi=max(n,rev);
+        int sum=0;
+        vector<bool>prime=p(1001);
+        for(int i=mini;i<=maxi;i++){
+            if(prime[i]){
+                sum+=i;
+            }
+        }
+        return sum;
+
+
+    }
+};

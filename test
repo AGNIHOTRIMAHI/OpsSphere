@@ -1,40 +1,32 @@
-hello world
-""
-class Solution {
-public:
-   
-    vector<bool> p(int end){
-         vector<bool>prime(1001,1);
-         prime[0]=0;
-         prime[1]=0;
-         for(int i=2;i*i<=1000;i++){
-            if(prime[i]){
-                for(int j=i*i;j<=1000;j+=i){
-                    prime[j]=0;
-                }
-            }
-         }
-         return prime;
-    }
-    int sumOfPrimesInRange(int n) {
-        int num=n;
-        int rev=0;
-        while(num){
-            int rem=num%10;
-            rev=rev*10+rem;
-            num/=10;
-        }
-        int mini=min(n,rev);
-        int maxi=max(n,rev);
-        int sum=0;
-        vector<bool>prime=p(1001);
-        for(int i=mini;i<=maxi;i++){
-            if(prime[i]){
-                sum+=i;
-            }
-        }
-        return sum;
+import requests
+import json
 
+# The URL of your FastAPI server
+API_URL = "http://localhost:8000/hitl/respond"
 
-    }
-};
+# ⚠️ This MUST match the thread_id you used to start the PR review
+THREAD_ID = "https://github.com/AGNIHOTRIMAHI/OpsSphere/pull/1" 
+
+payload = {
+    "thread_id": THREAD_ID,
+    "pr_url": "https://github.com/example/repo/pull/42",
+    "reviewer": "xyz",
+    "decision": "approve",  # Options: "approve", "request_changes", or "escalate"
+    "comment": "Security concerns addressed. Manually verified the logic."
+}
+
+def trigger_resume():
+    print(f"🚀 Sending human response for thread: {THREAD_ID}...")
+    try:
+        response = requests.post(API_URL, json=payload)
+        if response.status_code == 200:
+            print("✅ Success!")
+            print("Response from Server:", json.dumps(response.json(), indent=2))
+        else:
+            print(f"❌ Failed with status code: {response.status_code}")
+            print(response.text)
+    except Exception as e:
+        print(f"💥 Connection Error: {e}")
+
+if __name__ == "__main__":
+    trigger_resume()

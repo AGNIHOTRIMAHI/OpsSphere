@@ -1,0 +1,32 @@
+import requests
+import json
+
+# The URL of your FastAPI server
+API_URL = "http://localhost:8000/hitl/respond"
+
+# ⚠️ This MUST match the thread_id you used to start the PR review
+THREAD_ID = "https://github.com/AGNIHOTRIMAHI/OpsSphere/pull/1" 
+
+payload = {
+    "thread_id": THREAD_ID,
+    "pr_url": "https://github.com/example/repo/pull/42",
+    "reviewer": "xyz",
+    "decision": "approve",  # Options: "approve", "request_changes", or "escalate"
+    "comment": "Security concerns addressed. Manually verified the logic."
+}
+
+def trigger_resume():
+    print(f"🚀 Sending human response for thread: {THREAD_ID}...")
+    try:
+        response = requests.post(API_URL, json=payload)
+        if response.status_code == 200:
+            print("✅ Success!")
+            print("Response from Server:", json.dumps(response.json(), indent=2))
+        else:
+            print(f"❌ Failed with status code: {response.status_code}")
+            print(response.text)
+    except Exception as e:
+        print(f"💥 Connection Error: {e}")
+
+if __name__ == "__main__":
+    trigger_resume()
